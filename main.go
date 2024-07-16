@@ -1,36 +1,36 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-
-	"github.com/jaewon1022/learngo/src/github.com/jaewon1022/learngo/mydict"
+	"net/http"
 )
 
+var errHttpRequestFailed = errors.New("http request failed")
+
 func main() {
-	dictionary := mydict.Dictionary{"first":"First Word"}
-	key := "second"
-	value := "Second Word"
-	newValue := "fdklsjhfhlsakd"
-
-
-	err := dictionary.Add(key, value)
-	if(err != nil) {
-		fmt.Println(err)
-		} else {
-		updateErr := dictionary.Update(key, newValue)
-
-		if(updateErr != nil) {
-			fmt.Println(updateErr)
-		} else {
-			dict := dictionary.Info()
-	
-			fmt.Println("dict list : ", dict)
-
-			dictionary.Delete(key)
-
-			afterDict := dictionary.Info()
-
-			fmt.Println("after delete : ", afterDict)
-		}
+	urls := []string{
+		"https://www.airbnb.com/",
+		"https://www.google.com/",
+		"https://www.amazon.com/",
+		"https://www.facebook.com/",
+		"https://www.instagram.com/",
 	}
+
+	for _, url := range urls {
+		hitURL(url)
+	}
+}
+
+func hitURL(url string) error {
+	fmt.Println("Checking URL...")
+	
+	resp, err := http.Get(url)
+
+	if err != nil || resp.StatusCode >= 400 {
+		return errHttpRequestFailed
+	} 
+
+	return nil
+
 }
