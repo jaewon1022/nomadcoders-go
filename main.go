@@ -6,24 +6,22 @@ import (
 )
 
 func main() {
-	channel := make(chan bool)
+	channel := make(chan string)
 
-	people := [2]string {"nick", "test"}
+	people := [3]string {"nick", "test", "bm", }
 
 	for _,person := range people {
 		go isCool(person, channel)
 		
 	}
 
-	fmt.Println(<- channel)
-	fmt.Println(<- channel)
+	for i := 0; i < len(people) ; i++ {
+		fmt.Println(<-channel)
+	}
 }
 
-func isCool(person string, channel chan bool)  {
-	fmt.Println("isCool request received")
+func isCool(person string, channel chan string)  {
 	time.Sleep(time.Second * 2)
 
-	fmt.Println(person, "is Cool")
-
-	channel <- true
+	channel <- person + " is Cool"
 }
